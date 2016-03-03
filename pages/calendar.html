@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>IIS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        border: none;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    #sign {
+        position:fixed;
+        margin: 0;
+        padding: 0;
+        border: none;
+        overflow:hidden;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #b32025;
+        background-image: url("/media/IISLogo.png");
+        background-size: 50%;
+        background-repeat: no-repeat;
+    }
+
+    #cal {
+        margin-left: 51%;
+        width: 48%;
+        height: 95%;
+        padding-top: 15px;
+    }
+
+    #weather {
+        position: absolute;
+        width: 20%;
+        text-align: center;
+        left: 0px;
+        top: 55%;
+        width: 49%;
+        height: 39%;
+    }
+    #weather .valign {
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
+        height: 100%;
+        vertical-align: middle;
+    }
+    #weather img {
+        margin-left: auto;
+        margin-right: auto;
+        vertical-align: middle;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="sign">
+    <div id="cal">
+        <iframe style="border-width: 0;" src="https://www.google.com/calendar/embed?showTitle=0&amp;showPrint=0&amp;showCalendars=0&amp;mode=AGENDA&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=lp2jlql2d5pe71o5dta86bril4%40group.calendar.google.com&amp;color=%23B1440E&amp;ctz=America%2FChicago" height="100%" width="100%">&nbsp;</iframe>
+    </div>
+    <div id="weather">
+        <span class="valign"></span>
+        <img src="http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_travel_runway2&airportcode=KMEM&ForcedCity=Memphis&ForcedState=TN&zip=38113&language=EN" alt="Find more about Weather in Memphis, TN" />
+    </div>
+</div>
+
+</body>
+</html>

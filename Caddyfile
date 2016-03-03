@@ -1,0 +1,2 @@
+localhost:2020   # Site address
+bind 127.0.0.1
