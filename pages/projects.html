@@ -56,6 +56,7 @@
 <div id="sign"></div>
 <div id="credit">Loading</div>
 
+<script type="text/javascript" src="/third-party/lodash.min.js"></script>
 <script type="text/javascript" src="/third-party/jquery.min.js"></script>
 <script>
 var CREDITS = [
@@ -90,16 +91,6 @@ var CREDITS = [
     "Unsupervised Tuning of Cochlear Implants",
     "iVoc",
 ];
-
-function shuffle(a) {
-    var j, x, i;
-    for (i = a.length; i; i -= 1) {
-        j = Math.floor(Math.random() * i);
-        x = a[i - 1];
-        a[i - 1] = a[j];
-        a[j] = x;
-    }
-}
 
 function doBlur(start, stop) {
     $({blurRadius: start}).animate({blurRadius: stop}, {
@@ -136,7 +127,7 @@ function creditOut() {
 
 $(function() {
     console.log("Starting up!");
-    shuffle(CREDITS);
+    CREDITS = _.shuffle(CREDITS);
     creditIn();
 });
 </script>

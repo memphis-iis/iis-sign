@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>IIS People</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        border: none;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    #sign {
+        position:fixed;
+        margin: 0;
+        padding: 0;
+        border: none;
+        overflow:hidden;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #b32025;
+        background-image: url("/media/IISLogo.png");
+        background-size: 95%;
+        background-repeat: no-repeat;
+    }
+
+    #people {
+        position:fixed;
+        top: 10%;
+        left: 10%;
+        height: 80%;
+        width: 80%;
+        text-align: center;
+        vertical-align: middle;
+        color: #fff;
+        padding: 5px 20px 13px 20px;
+    }
+
+    .person-image {
+        position:fixed;
+        display: none;
+        size: 25%;
+        margin: 6px;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="sign"></div>
+<div id="people"></div>
+
+<script type="text/javascript" src="/third-party/lodash.min.js"></script>
+<script type="text/javascript" src="/third-party/jquery.min.js"></script>
+<script type="text/javascript" src="/third-party/jquery.onImagesLoad.min.js"></script>
+<script>
+PEOPLE = [
+    "adam-headshot2.jpg",
+    "andrew_olney.jpg",
+    "aolney.jpg",
+    "art_graesser.jpg",
+    "awindsor.jpg",
+    "bbanerjee.jpg",
+    "beth_meisinger.jpg",
+    "bmorshed.jpg",
+    "ckelly.jpg",
+    "druggiero.jpg",
+    "ehbuder.jpg",
+    "elizabeth-gire.jpg",
+    "gbidelman.jpg",
+    "gdeitz.gif",
+    "huxiangen.2.jpg",
+    "igomez.jpg",
+    "jason_braasch.jpg",
+    "koller.jpg",
+    "ljarmulowicz.jpg",
+    "lkim.jpg",
+    "lwilliams.jpg",
+    "lwindsor.jpg",
+    "mferkin.jpg",
+    "mhaynes.jpg",
+    "myeasin.jpg",
+    "nperson.jpg",
+    "philip_pavlik.jpg",
+    "randy_floyd.jpg",
+    "rcogar.jpg",
+    "remy-debes.jpg",
+    "rus.png",
+    "sfranklin.jpg",
+    "shaun-gallagher.jpg",
+    "shuette.jpg",
+    "somogy-varga.png",
+    "stak.jpg",
+    "tmartindale.jpg",
+    "ugriebel.jpg",
+    "vmiddleton.jpg",
+    "zcai.jpg",
+];
+
+
+function personToId(person) {
+    return _.replace(person, ".", "-");
+}
+
+function personBatch() {
+    var startPause = 0;
+    for (var i = 0; i < PEOPLE.length; ++i) {
+        var person = personToId(PEOPLE.pop());
+        onePerson(person, startPause);
+        startPause += 250;
+    }
+}
+
+function onePerson(personId, startPause) {
+    console.log(personId, startPause);
+    $('#'+personId)
+        .css('top',  _.random(10,70) + '%')
+        .css('left', _.random(10,80) + '%')
+        .delay(startPause + _.random(250, 750))
+        .slideDown(250)
+        .delay(300)
+        .fadeOut(300);
+}
+
+$(function() {
+    PEOPLE = _.shuffle(_.concat(PEOPLE, PEOPLE, PEOPLE));
+    console.log(PEOPLE);
+    var img_holder = $('#people');
+
+    _.each(PEOPLE, function(person) {
+        var src = '/people/'+person;
+        img_holder.append(
+            $('<img class="person-image" />')
+                .attr('id', personToId(person))
+                .attr('src', src)
+        );
+    });
+
+    $('#people').onImagesLoad( function($selector) {
+        personBatch();
+    });
+});
+</script>
+
+</body>
+</html>
