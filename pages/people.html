@@ -104,34 +104,12 @@ PEOPLE = [
     "zcai.jpg",
 ];
 
-
 function personToId(person) {
     return _.replace(person, ".", "-");
 }
 
-function personBatch() {
-    var startPause = 0;
-    for (var i = 0; i < PEOPLE.length; ++i) {
-        var person = personToId(PEOPLE.pop());
-        onePerson(person, startPause);
-        startPause += 250;
-    }
-}
-
-function onePerson(personId, startPause) {
-    console.log(personId, startPause);
-    $('#'+personId)
-        .css('top',  _.random(10,70) + '%')
-        .css('left', _.random(10,80) + '%')
-        .delay(startPause + _.random(250, 750))
-        .slideDown(250)
-        .delay(300)
-        .fadeOut(300);
-}
-
 $(function() {
-    PEOPLE = _.shuffle(_.concat(PEOPLE, PEOPLE, PEOPLE));
-    console.log(PEOPLE);
+    PEOPLE = _.shuffle(_.concat(PEOPLE, PEOPLE, PEOPLE, PEOPLE));
     var img_holder = $('#people');
 
     _.each(PEOPLE, function(person) {
@@ -143,8 +121,20 @@ $(function() {
         );
     });
 
-    $('#people').onImagesLoad( function($selector) {
-        personBatch();
+    $('#people').onImagesLoad(function($selector) {
+        var startPause = 0;
+
+        _.each(PEOPLE, function(person, index) {
+            $('#'+personToId(person))
+                .css('top',  _.random(10,70) + '%')
+                .css('left', _.random(10,80) + '%')
+                .delay(startPause + _.random(250, 500))
+                .slideDown(_.random(200, 325))
+                .delay(_.random(250, 350))
+                .fadeOut(_.random(250, 350));
+
+            startPause += _.random(200, 300);
+        });
     });
 });
 </script>
