@@ -69,10 +69,14 @@ var PREV_KEYS = {
     'p': true
 };
 
+function buildUrl(base) {
+    return base + '?rnd1=' + _.random(0xffff) + '&rnd2=' + _.random(0xffff);
+}
+
 function pageSet(idx) {
     console.log("Switching page from", PAGE_INDEX, "to", idx);
     PAGE_INDEX = idx;
-    $('#sign').attr('src', PAGES[idx]);
+    $('#sign').attr('src', buildUrl(PAGES[idx]));
 }
 
 function pageInc(inc) {
