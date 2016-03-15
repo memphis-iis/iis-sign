@@ -1,15 +1,97 @@
-# IIS Sign LIRC conf extras
+# IIS-Sign LIRC conf extras
 
 This directory is an attempt to help you jump start projector control with
-LIRC. Contents:
+LIRC. Note that recent versions of Ubuntu have an older lirc. As a result,
+the combination of lircd and our USB-UIRT device tends to segfault. You can
+fix this by custom building your own lirc. Note that the rest of this document
+assumes that this is what you did.
 
-## hardware.conf
+## Building lirc
 
-An attempt to keep a reasonably up-to-date copy of the config file you should
-use for LIRC (at `/etc/lirc`)
+First you should also read: http://www.lirc.org/html/install.html. You'll need
+all the required dependencies. You should also install the ftdi/usb optional
+dependencies:
 
-## ViewSonic-PLED-W500-UltraPortableProjector.conf
+````
+$ sudo apt-get libusb-dev libftdi-dev libftdi1-dev
+````
+
+You should also remove any previous packaged version of lirc:
+
+````
+$ sudo apt-get purge lirc lirc-x
+````
+
+After that it's as simple as cloning the repository, configuring, building,
+and installing:
+
+````
+$ git clone git://git.code.sf.net/p/lirc/git lirc-git
+$ cd lirc-git
+$ ./autogen.sh
+$ ./configure --prefix=/usr --sysconfdir=/etc
+$ make
+$ sudo make install
+````
+
+Note that after the `configure` step you should verify that you still have the
+ftdi and usb build options enabled.
+
+You can now proceed to configure your installation.
+
+## Configuring the installed lirc
+
+You DO need to provide a remote configuration file:
+
+* If you are using the Casio wall-mounted XJ-UT310WN ultra short throw
+  projector, you can use the file `casio.conf` from the directory
+* If you are using the ViewSonic ultra portable projector, you can use the file
+  `viewsonic.conf` from this directory
+
+Regardless, you should copy the appropriate file to `/etc/lirc/lircd.conf.d/`
+
+## Running lircd
+
+You'll need to make sure `lircd` is not running when you use `irrecord`.
+Otherwise, you'll need to run `lircd`. For other operations (e.g. debugging
+input with `irw` or sending signals with `irsend`) you need to be running
+`lircd`. If you build/configured lirc as above, you can run lirc with our
+USB UIRT device like so:
+
+````
+$ sudo lircd --nodaemon -d /dev/ttyUSB0 --driver=usb_uirt_raw
+````
+
+With this running you could watch IR signals received:
+
+````
+$ irw /var/run/lirc/lircd
+````
+
+or you could send a signal:
+
+````
+$ irsend -d /var/run/lirc/lircd SEND_ONCE ViewSonic-PLED-W500-UltraPortableProjector key_power
+````
+
+## Notes on viewsonic.conf
 
 Sample configuration for the ViewSonic projector we originally bought for our
-project (we are now using a different projector). Made with
-`sudo irrecord --driver=usb_uirt_raw ViewSonic-PLED-W500-UltraPortableProjector.conf`
+project (we are now using a different projector). Made originally with the
+Ubuntu-packaged irrecord command: `sudo irrecord --driver=usb_uirt_raw
+ViewSonic-PLED-W500-UltraPortableProjector.conf` (with lircd NOT running)
+
+
+Some nonstandard keys we chose:
+
+* KEY_TV for the "HDMI" button
+* KEY_VCR for the "SD/USB" button
+* KEY_CONFIG for the "My Button" button
+* KEY_SYSRQ for "Auto Sync" button
+* KEY_SWITCHVIDEOMODE for "Color Mode" button
+* KEY_SELECT for "Source" button
+
+## irrecord button names
+
+When using irrecord, you'll need to use the predefined key names. See the file
+`lirc-key-list.txt` in this directory.
