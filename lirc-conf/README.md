@@ -74,6 +74,22 @@ or you could send a signal:
 $ irsend -d /var/run/lirc/lircd SEND_ONCE ViewSonic-PLED-W500-UltraPortableProjector key_power
 ````
 
+## Putting it all together
+
+With all that under your belt, you're ready for one-off IR signal
+transmission. To make this easier, we provide the simple script `send_power.sh`
+in this directory. You should run it as root (or via sudo):
+
+````
+$ ./send_power.sh
+````
+
+It starts lircd, sends a key_power signal, and then shuts down lircd. All that
+you need to do is copy it somewhere, change the configuration section to match
+(i.e. choose the correct remote control name), and schedule it to run as the
+root user (e.g. via `sudo crontab -e`).
+
+
 ## Notes on viewsonic.conf
 
 Sample configuration for the ViewSonic projector we originally bought for our
