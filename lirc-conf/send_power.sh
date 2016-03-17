@@ -15,10 +15,12 @@ fi
 # Configuration
 LIRCD_DEV=/dev/ttyUSB0
 DRIVER=usb_uirt_raw
-REMOTE=ViewSonic-PLED-W500-UltraPortableProjector
+REMOTE=casio-yt-140
 IRSEND_DEV=/var/run/lirc/lircd
 
 # start lircd
+echo "Insuring /var/run/lirc"
+mkdir -p /var/run/lirc
 echo "Starting lircd..."
 lircd --nodaemon -d $LIRCD_DEV --driver=$DRIVER &
 LIRCD_PID=$!
