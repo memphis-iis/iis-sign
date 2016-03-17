@@ -89,6 +89,16 @@ you need to do is copy it somewhere, change the configuration section to match
 (i.e. choose the correct remote control name), and schedule it to run as the
 root user (e.g. via `sudo crontab -e`).
 
+## Notes on casio.conf
+
+Some keys were not recorded since there weren't any good matches in the lirc
+remote key namespace. The skipped keys are:
+
+* Keystone +/- buttons
+* Blank, Freeze, and Echo buttons (the row directly beneath the Keystone,
+  D-Zoom, and Volume button pairs)
+* Timer, Auto, Aspect, and Func buttons (the column of small buttons on the
+  lower right side of the remote)
 
 ## Notes on viewsonic.conf
 
