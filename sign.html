@@ -39,12 +39,13 @@
 <script type="text/javascript" src="/third-party/jquery.min.js"></script>
 <script type="text/javascript" src="/js/keys.js"></script>
 
+<!-- Special page content source -->
+<script src="/test/blurb.txt" charset="utf-8" type="text/text" id="overrideBlurb"></script>
+<script src="/test/sign.txt" charset="utf-8" type="text/text" id="overrideSign"></script>
+
 <!-- Actual logic -->
 <script type="text/javascript">
 var PAGE_CHANGE_TIMEOUT = 28500;
-
-var BLURB_URL = '/test/blurb.txt';
-var SIGN_OVERRIDE_URL = '/test/blurb.txt';
 
 var PAGES = [
     '/pages/main-logo.html',
@@ -108,6 +109,7 @@ function timedChange() {
 }
 
 $(function(){
+    // Debugging keys
     $(document).keydown(function(e) {
         try {
             var ky = keys.xlate(e.keyCode);
@@ -121,7 +123,15 @@ $(function(){
         }
     });
 
-    // Give the very first page some special time
+    // Special override text
+    var blurbOver = _.trim($('#overrideBlurb').text());
+    console.log('BLURB:', blurbOver, $('#overrideBlurb'));
+
+    var signOver = _.trim($('#overrideSign').text());
+    console.log('SIGN:', signOver, $('#overrideSign'));
+
+    // Start at the beginning, and insure the first page displayed gets
+    // some extra time
     pageSet(0);
     setTimeout(timedChange, PAGE_CHANGE_TIMEOUT * 1.5);
 });
