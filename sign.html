@@ -39,17 +39,17 @@
 <script type="text/javascript" src="/third-party/jquery.min.js"></script>
 <script type="text/javascript" src="/js/keys.js"></script>
 
-<!-- Special page content source -->
-<script src="/test/blurb.txt" charset="utf-8" type="text/text" id="overrideBlurb"></script>
-<script src="/test/sign.txt" charset="utf-8" type="text/text" id="overrideSign"></script>
-
 <!-- Actual logic -->
 <script type="text/javascript">
 var PAGE_CHANGE_TIMEOUT = 28500;
 
+var BLURB_SRC = '/test/blurb.txt';
+var OVERRIDE_SRC = '/test/sign.txt';
+var PAGE_BLURB_TEMPLATE = '/pages/blurb.html';
+
 var PAGES = [
     '/pages/main-logo.html',
-    'https://umdrive.memphis.edu/hcogar/public/Cog%20Sci%20widescreen-projector-sign-021016.pdf',
+    'BLURB',
     '/pages/projects.html',
     '/pages/calendar.html',
     '/pages/life.html',
@@ -74,14 +74,48 @@ var PREV_KEYS = {
     'p': true
 };
 
-function buildUrl(base) {
-    return base + '?rnd1=' + _.random(0xffff) + '&rnd2=' + _.random(0xffff);
+var blurbOver = null;
+var signOver = null;
+
+function buildUrl(base, params) {
+    return base + '?' + _
+        .chain({
+            'rnd1': _.random(0xffff),
+            'rnd2': _.random(0xffff)
+        })
+        .extend(params || {})
+        .map(function(val, key) {
+            return key + '=' + encodeURIComponent(val);
+        })
+        .join('&')
+        .value();
 }
 
 function pageSet(idx) {
     console.log("Switching page from", PAGE_INDEX, "to", idx);
     PAGE_INDEX = idx;
-    $('#sign').attr('src', buildUrl(PAGES[idx]));
+
+    var targetUrl;
+    if (!!signOver || (!!blurbOver && PAGES[idx] === 'BLURB')) {
+        // Override!
+        var templateText;
+        if (!!signOver) {
+            console.log("Override - will only ever show this page");
+            templateText = signOver;
+        }
+        else {
+            console.log("Showing blurb override for this page");
+            templateText = blurbOver;
+        }
+        targetUrl = buildUrl(PAGE_BLURB_TEMPLATE, {'t': templateText});
+    }
+    else {
+        // Plain new page
+        console.log();
+        targetUrl = buildUrl(PAGES[idx]);
+    }
+
+    $('#sign').attr('src', targetUrl);
 }
 
 function pageInc(inc) {
@@ -108,6 +142,43 @@ function timedChange() {
     setTimeout(timedChange, PAGE_CHANGE_TIMEOUT);
 }
 
+function loadOverrides() {
+    // Start loading the sign text - also note that these callbacks happen in
+    // the order they are added, so we add the blurn query last
+    var signWork = $.get(OVERRIDE_SRC, function(data) {
+        console.log('Sign override got something back');
+        signOver = _.trim(data);
+    })
+    .fail(function() {
+        console.log('Sign override retrieval failed');
+        signOver = null;
+    })
+    .always(function() {
+        console.log("SIGN OVERRIDE:", signOver);
+    })
+    .always(function() {
+        if (!!signOver) {
+            // Don't care - sign overrides everything
+            blurbOver = null;
+            return;
+        }
+
+        $.get(BLURB_SRC, function(data) {
+            console.log('Blurb got something back');
+            blurbOver = _.trim(data);
+        })
+        .fail(function() {
+            console.log('Blurbretrieval failed');
+            blurbOver = null;
+        })
+        .always(function() {
+            console.log("BLURB OVERRIDE:", blurbOver);
+        });
+    });
+
+    return signWork;  // Not using right now, but might be handy
+}
+
 $(function(){
     // Debugging keys
     $(document).keydown(function(e) {
@@ -123,17 +194,15 @@ $(function(){
         }
     });
 
-    // Special override text
-    var blurbOver = _.trim($('#overrideBlurb').text());
-    console.log('BLURB:', blurbOver, $('#overrideBlurb'));
 
-    var signOver = _.trim($('#overrideSign').text());
-    console.log('SIGN:', signOver, $('#overrideSign'));
-
-    // Start at the beginning, and insure the first page displayed gets
-    // some extra time
+    // Force the first page, then start looking for overrides - we can restart
+    // if we find anything that is an override
     pageSet(0);
-    setTimeout(timedChange, PAGE_CHANGE_TIMEOUT * 1.5);
+    loadOverrides().always(function() {
+        if (!!blurbOver || !!signOver) {
+            pageSet(0);  // Restart!
+        }
+    });
 });
 </script>
 
