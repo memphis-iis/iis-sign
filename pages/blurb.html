@@ -4,7 +4,7 @@
 <title>IIS</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href='https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
 <style>
     body, html {
         margin: 0;
@@ -120,6 +120,7 @@ function xformLine(line) {
 $(function(){
     var html = _.chain(getParameterByName('t'))
         .split('\n')
+        .map(_.trim)
         .map(xformLine)
         .join('\n')
         .value();

@@ -95,8 +95,9 @@ function pageSet(idx) {
     console.log("Switching page from", PAGE_INDEX, "to", idx);
     PAGE_INDEX = idx;
 
+    var isBlurbPage = (PAGES[idx] === 'BLURB');
     var targetUrl;
-    if (!!signOver || (!!blurbOver && PAGES[idx] === 'BLURB')) {
+    if (!!signOver || (!!blurbOver && isBlurbPage)) {
         // Override!
         var templateText;
         if (!!signOver) {
@@ -108,6 +109,11 @@ function pageSet(idx) {
             templateText = blurbOver;
         }
         targetUrl = buildUrl(PAGE_BLURB_TEMPLATE, {'t': templateText});
+    }
+    else if (isBlurbPage) {
+        // We have a blurb page, but aren't supposed to show a blurb
+        console.log("Skipping blurb - page idx", idx);
+        pageInc(1);
     }
     else {
         // Plain new page
@@ -137,7 +143,7 @@ function pageInc(inc) {
 }
 
 function timedChange() {
-    console.log("TIMED CHANGED");
+    console.log("TIMED CHANGE");
     pageInc(1);
     setTimeout(timedChange, PAGE_CHANGE_TIMEOUT);
 }
@@ -145,7 +151,7 @@ function timedChange() {
 function loadOverrides() {
     // Start loading the sign text - also note that these callbacks happen in
     // the order they are added, so we add the blurn query last
-    var signWork = $.get(OVERRIDE_SRC, function(data) {
+    var signWork = $.get(buildUrl(OVERRIDE_SRC), function(data) {
         console.log('Sign override got something back');
         signOver = _.trim(data);
     })
@@ -163,7 +169,7 @@ function loadOverrides() {
             return;
         }
 
-        $.get(BLURB_SRC, function(data) {
+        $.get(buildUrl(BLURB_SRC), function(data) {
             console.log('Blurb got something back');
             blurbOver = _.trim(data);
         })
