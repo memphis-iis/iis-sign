@@ -1,9 +1,7 @@
-h1:&nbsp;
 h1:THE INSTITUTE FOR INTELLIGENT SYSTEMS
 h1off:WELCOMES
 ---
-h2:Richard Arlington
-h2:University of Tennessee
-
+h2:Mark Conley
+h2:University of Memphis
 h2off:COGNITIVE SCIENCE SEMINAR GUEST SPEAKER
-h2off:TODAY, FEBRUARY 10<sup>TH</sup> AT 4PM
+h2off:Wednesday, April 20th AT 4pm

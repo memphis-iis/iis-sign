@@ -33,7 +33,7 @@
     }
 
     .h1 {
-	padding: 0;
+    padding: 0;
         text-align: center;
         font-size: 375%;
         font-weight: bold;
@@ -42,7 +42,7 @@
     }
 
     .h2 {
-	padding: 0;
+    padding: 0;
         text-align: center;
         font-size: 275%;
         font-weight: bold;
@@ -72,26 +72,9 @@
 
 <script type="text/javascript" src="/third-party/lodash.min.js"></script>
 <script type="text/javascript" src="/third-party/jquery.min.js"></script>
+<script type="text/javascript" src="/js/util.js"></script>
 
 <script>
-function getParameterByName(name, url) {
-    if (!url) {
-        url = window.location.href;
-    }
-
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i");
-    var results = regex.exec(url);
-    if (!results) {
-        return null;
-    }
-    if (!results[2]) {
-        return '';
-    }
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
-
 function filt(rgx, f) {
     return {'match': rgx, 'xform': f};
 }
@@ -120,7 +103,7 @@ function xformLine(line) {
 }
 
 $(function(){
-    var html = _.chain(getParameterByName('t'))
+    var html = _.chain(utils.getParameterByName('t'))
         .split('\n')
         .map(_.trim)
         .map(xformLine)

@@ -37,7 +37,7 @@
 <!-- JAVASCRIPT RESOURCES -->
 <script type="text/javascript" src="/third-party/lodash.min.js"></script>
 <script type="text/javascript" src="/third-party/jquery.min.js"></script>
-<script type="text/javascript" src="/js/keys.js"></script>
+<script type="text/javascript" src="/js/util.js"></script>
 
 <!-- Actual logic -->
 <script type="text/javascript">
@@ -186,6 +186,14 @@ function loadOverrides() {
 }
 
 $(function(){
+    // CHECK TO SEE IF WE SHOULD OVERRIDE FOR DEBUGGING
+    if (utils.isTrue(utils.getParameterByName('debug'))) {
+        console.log('USING DEBUG MODE CONFIGURATION');
+        PAGE_CHANGE_TIMEOUT = 100000;
+        BLURB_SRC = '/test/blurb.txt';
+        OVERRIDE_SRC = '/test/sign.txt';
+    }
+
     // Debugging keys
     $(document).keydown(function(e) {
         try {
