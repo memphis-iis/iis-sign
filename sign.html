@@ -114,6 +114,7 @@ function pageSet(idx) {
         // We have a blurb page, but aren't supposed to show a blurb
         console.log("Skipping blurb - page idx", idx);
         pageInc(1);
+        return;
     }
     else {
         // Plain new page
@@ -150,7 +151,7 @@ function timedChange() {
 
 function loadOverrides() {
     // Start loading the sign text - also note that these callbacks happen in
-    // the order they are added, so we add the blurn query last
+    // the order they are added, so we add the blurb query last
     var signWork = $.get(buildUrl(OVERRIDE_SRC), function(data) {
         console.log('Sign override got something back');
         signOver = _.trim(data);
@@ -182,7 +183,7 @@ function loadOverrides() {
         });
     });
 
-    return signWork;  // Not using right now, but might be handy
+    return signWork;  // So our callers can also use the Future
 }
 
 $(function(){
@@ -207,7 +208,6 @@ $(function(){
             console.log('document keydown capture error', e);
         }
     });
-
 
     // Force the first page, then start looking for overrides - we can restart
     // if we find anything that is an override
