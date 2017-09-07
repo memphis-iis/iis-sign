@@ -11,7 +11,7 @@ if [ x"$1" != x ]; then
 fi
 
 echo "Debug at http://localhost:9222"
-/opt/google/chrome/chrome --kiosk --remote-debugging-port=9222 "http://localhost:2020/sign.html$QS"
+/opt/google/chrome/chrome --kiosk --disable-session-crashed-bubble --remote-debugging-port=9222 "http://localhost:2020/sign.html$QS"
 
 echo "Killing caddy"
 kill $CADDY_PID
