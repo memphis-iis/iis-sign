@@ -2,7 +2,7 @@ localhost:2020   # Site address
 bind 127.0.0.1
 log stdout
 
-proxy /LDC psychiisnas.memphis.edu {
+proxy /projector psychiisnas.memphis.edu {
     proxy_header Host psychiisnas.memphis.edu
     proxy_header X-Real-IP {remote}
     proxy_header X-Forwarded-Proto {scheme}
